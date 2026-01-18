@@ -1,0 +1,636 @@
+/* ==============================================
+   ONLINE NONOGRAM - Page Styles
+   ==============================================
+   Layout: Desktop-first with mobile breakpoint at 1024px
+   Design: Calm, minimal, premium feel
+   ============================================== */
+
+/* ==============================================
+   CONTAINER
+   ============================================== */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+/* ==============================================
+   HEADER
+   ============================================== */
+.header {
+  padding: 14px 24px;
+  background-color: #fbfbfb;
+  border-bottom: 1px solid #ebebeb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.headerInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.siteTitle {
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #4a4a4a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Pill-shaped nav buttons - minimal and calm */
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 7px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #606060;
+  background-color: #f0f0f0;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.navButton:hover {
+  background-color: #e8e8e8;
+  color: #4a4a4a;
+}
+
+.navButton:active {
+  background-color: #e0e0e0;
+  color: #404040;
+}
+
+.navButton:focus-visible {
+  outline: 2px solid #9abfda;
+  outline-offset: 2px;
+}
+
+/* Active difficulty button */
+.navButtonActive {
+  background-color: #4a4a4a;
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.navButtonActive:hover {
+  background-color: #3a3a3a;
+  color: #ffffff;
+}
+
+.navButtonActive:active {
+  background-color: #303030;
+}
+
+/* Disabled nav button */
+.navButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.navButton:disabled:hover {
+  background-color: #f0f0f0;
+  color: #606060;
+}
+
+/* Streak badge inside Daily button */
+.streakBadge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0;
+  padding: 2px 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+/* Tooltip for streak badge */
+.streakBadge::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+
+  background-color: #333;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+  opacity: 0;
+  visibility: hidden;
+  z-index: 10;
+}
+
+/* Show tooltip on hover or focus */
+.streakBadge:hover::after,
+.streakBadge:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Streak badge when Daily button is active (dark background) */
+.navButtonActive .streakBadge {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Daily solved checkmark */
+.dailySolvedMark {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6a9a6a;
+  opacity: 0.8;
+  line-height: 1;
+}
+
+.navButtonActive .dailySolvedMark {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Calm Mode toggle - subtle distinction */
+.calmModeToggle {
+  padding: 7px 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #808080;
+  background-color: transparent;
+  border: 1px solid #d8d8d8;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.calmModeToggle:hover {
+  background-color: #f8f8f8;
+  border-color: #c8c8c8;
+  color: #686868;
+}
+
+.calmModeToggle:active {
+  background-color: #f0f0f0;
+  border-color: #c0c0c0;
+}
+
+.calmModeToggle:focus-visible {
+  outline: 2px solid #9abfda;
+  outline-offset: 2px;
+}
+
+/* Calm Mode ON - muted sage green, not bright */
+.calmModeActive {
+  background-color: #f0f5f0;
+  border-color: #c5d8c5;
+  color: #6a8a6a;
+}
+
+.calmModeActive:hover {
+  background-color: #e8f0e8;
+  border-color: #b8d0b8;
+  color: #5a7a5a;
+}
+
+.calmModeActive:active {
+  background-color: #e0ebe0;
+}
+
+/* ==============================================
+   MAIN CONTENT - Desktop (>=1024px)
+   Two-column grid: puzzle left, ad rail right
+   ============================================== */
+.main {
+  flex: 1;
+  display: grid;
+  /* minmax(0, 1fr) allows left column to shrink below content size, preventing overflow */
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  align-items: start;
+  align-content: start;
+}
+
+/* ==============================================
+   PUZZLE COLUMN
+   ============================================== */
+.puzzleColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-self: center;
+  width: 100%;
+  /* Allow larger boards to expand */
+  max-width: 100%;
+  /* Allow column to shrink below content size in grid */
+  min-width: 0;
+}
+
+/* ==============================================
+   PUZZLE AREA
+   Calm card container that wraps the nonogram board
+   ============================================== */
+.puzzleArea {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background-color: #fefefe;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0, 0, 0, 0.02);
+  /* Naturally hugs content, constrained by parent */
+  max-width: 100%;
+  /* Allow horizontal scroll inside if board is very large */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.placeholderText {
+  font-size: 1.125rem;
+  color: #c0c0c0;
+  font-weight: 500;
+  user-select: none;
+}
+
+/* ==============================================
+   CONTROLS ROW
+   ============================================== */
+.controlsRow {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 4px 0;
+}
+
+/* Pill-shaped control buttons - calm and minimal */
+.controlButton {
+  padding: 9px 16px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #606060;
+  background-color: #f8f8f8;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.controlButton:hover {
+  background-color: #f0f0f0;
+  color: #4a4a4a;
+}
+
+.controlButton:active {
+  background-color: #e8e8e8;
+  color: #404040;
+}
+
+.controlButton:focus-visible {
+  outline: 2px solid #9abfda;
+  outline-offset: 2px;
+}
+
+/* Disabled state for undo/redo */
+.controlButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.controlButton:disabled:hover {
+  background-color: #f8f8f8;
+  color: #606060;
+}
+
+/* ==============================================
+   DAILY META LABEL
+   ============================================== */
+.dailyMeta {
+  font-size: 0.8rem;
+  color: #8a8a8a;
+  margin: 2px 0 0 0;
+  text-align: center;
+}
+
+/* Daily view section with toggle and label */
+.dailyViewSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Daily view toggle row */
+.dailyViewToggle {
+  display: flex;
+  gap: 4px;
+}
+
+/* View toggle buttons (Today/Yesterday) */
+.viewButton {
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #707070;
+  background-color: #f0f0f0;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.viewButton:hover {
+  background-color: #e8e8e8;
+  color: #505050;
+}
+
+.viewButton:active {
+  background-color: #e0e0e0;
+}
+
+.viewButton:focus-visible {
+  outline: 2px solid #9abfda;
+  outline-offset: 2px;
+}
+
+.viewButtonActive {
+  background-color: #5a5a5a;
+  color: #ffffff;
+}
+
+.viewButtonActive:hover {
+  background-color: #4a4a4a;
+  color: #ffffff;
+}
+
+.viewButtonActive:active {
+  background-color: #404040;
+}
+
+/* Daily view toggle row (Today/Yesterday) */
+.dailyViewToggleRow {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+/* Daily view toggle button - smaller pill */
+.dailyViewButton {
+  padding: 5px 10px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #707070;
+  background-color: #efefef;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.dailyViewButton:hover {
+  background-color: #e6e6e6;
+  color: #505050;
+}
+
+.dailyViewButton:active {
+  background-color: #ddd;
+}
+
+.dailyViewButton:focus-visible {
+  outline: 2px solid #9abfda;
+  outline-offset: 2px;
+}
+
+/* Active state - subtle dark pill */
+.dailyViewButtonActive {
+  background-color: #6a6a6a;
+  color: #fff;
+}
+
+.dailyViewButtonActive:hover {
+  background-color: #5a5a5a;
+  color: #fff;
+}
+
+.dailyViewButtonActive:active {
+  background-color: #505050;
+}
+
+/* ==============================================
+   STATUS MESSAGES
+   ============================================== */
+.successMessage {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #5a8a5a;
+  background-color: #f0f8f0;
+  border: 1px solid #d0e8d0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 4px 0 0 0;
+  text-align: center;
+}
+
+.errorMessage {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #7a6a5a;
+  background-color: #faf8f5;
+  border: 1px solid #e8e0d8;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 4px 0 0 0;
+  text-align: center;
+}
+
+/* ==============================================
+   AD CONTAINER
+   Desktop: fixed-width right column (always reserves space)
+   Mobile: below puzzle column
+   ============================================== */
+.adContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Fixed width ALWAYS reserved to prevent CLS when Calm Mode toggles */
+  width: 300px;
+  min-width: 300px;
+  flex-shrink: 0;
+  /* Hug the right edge on desktop grid */
+  justify-self: end;
+}
+
+/* Desktop: show 300x600 ad rail wrapper (always present for spacing) */
+.adDesktopWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Reserve exact ad dimensions even when AdSlot renders nothing */
+  width: 300px;
+  height: 600px;
+  min-height: 600px;
+}
+
+/* Desktop: hide mobile banner */
+.adMobileWrapper {
+  display: none;
+}
+
+/* ==============================================
+   TABLET & MOBILE (<1024px)
+   Single column layout
+   ============================================== */
+@media (max-width: 1023px) {
+  .header {
+    padding: 12px 20px;
+  }
+
+  .siteTitle {
+    font-size: 1.25rem;
+  }
+
+  /* Switch to single column vertical flex */
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  /* Puzzle column stays first (default order) */
+  .puzzleColumn {
+    max-width: none;
+    width: 100%;
+    order: 0;
+  }
+
+  /* Responsive puzzle area for tablets/mobile */
+  .puzzleArea {
+    padding: 12px;
+  }
+
+  /* Ad container appears after puzzleColumn, centered */
+  .adContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 320px;
+    min-width: 320px;
+    order: 1;
+    margin: 0 auto;
+  }
+
+  /* Hide desktop ad rail completely */
+  .adDesktopWrapper {
+    display: none;
+    min-height: 0;
+  }
+
+  /* Show mobile banner centered below controls - reserves space */
+  .adMobileWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 320px;
+    min-height: 50px;
+    margin-top: 8px;
+  }
+}
+
+/* ==============================================
+   SMALL MOBILE (<600px)
+   Compact UI adjustments
+   ============================================== */
+@media (max-width: 599px) {
+  .header {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .siteTitle {
+    font-size: 1.125rem;
+  }
+
+  .nav {
+    width: 100%;
+  }
+
+  .navButton {
+    padding: 7px 12px;
+    font-size: 0.8125rem;
+  }
+
+  .calmModeToggle {
+    padding: 7px 10px;
+    font-size: 0.75rem;
+  }
+
+  .main {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  /* Smaller puzzle on very small screens */
+  .puzzleArea {
+    padding: 10px;
+  }
+
+  .placeholderText {
+    font-size: 1rem;
+  }
+
+  .controlsRow {
+    gap: 8px;
+  }
+
+  .controlButton {
+    padding: 8px 14px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* ==============================================
+   TOUCH DEVICES (hover: none)
+   Hide tooltips on devices without hover
+   ============================================== */
+@media (hover: none) {
+  .streakBadge::after {
+    display: none;
+  }
+}

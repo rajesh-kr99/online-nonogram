@@ -1,0 +1,338 @@
+/* ==============================================
+   NONOGRAM BOARD COMPONENT STYLES
+   ==============================================
+   Layout: CSS Grid with clues + cells
+   Design: Calm, minimal - matches page styling
+   ============================================== */
+
+/* ==============================================
+   CONTAINER
+   ============================================== */
+.boardContainer {
+  /* Cell size variable - adjusted in media queries */
+  --cell: 36px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Prevent page scroll while painting on touch devices */
+  touch-action: pan-x;
+  /* Allow horizontal scroll if board exceeds container, stay centered when it fits */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ==============================================
+   MODE TOGGLE ROW
+   Pill-style buttons matching page nav
+   Mobile-only: hidden on desktop, shown on touch devices
+   ============================================== */
+.modeToggleRow {
+  display: none;
+  gap: 6px;
+  justify-content: center;
+}
+
+.modeButton {
+  padding: 7px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #606060;
+  background-color: #f0f0f0;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.modeButton:hover {
+  background-color: #e8e8e8;
+  color: #4a4a4a;
+}
+
+.modeButton:active {
+  background-color: #e0e0e0;
+  color: #404040;
+}
+
+.modeButton:focus-visible {
+  outline: 2px solid #9abfda;
+  outline-offset: 2px;
+}
+
+/* Active mode - subtle dark fill */
+.modeActive {
+  background-color: #4a4a4a;
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.modeActive:hover {
+  background-color: #3a3a3a;
+  color: #ffffff;
+}
+
+.modeActive:active {
+  background-color: #303030;
+}
+
+/* ==============================================
+   BOARD GRID
+   CSS Grid: corner + col clues + row clues + cells
+   ============================================== */
+.board {
+  display: grid;
+  gap: 1px;
+  background-color: #c8c8c8;
+  border: 2px solid #a0a0a0;
+  border-radius: 6px;
+  padding: 1px;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Prevent touch scrolling during paint gestures */
+  touch-action: none;
+  /* Size to content, respect container bounds */
+  width: max-content;
+  max-width: 100%;
+}
+
+/* ==============================================
+   CORNER SPACE (top-left empty area)
+   ============================================== */
+.cornerSpace {
+  background-color: #f5f5f5;
+}
+
+/* ==============================================
+   CLUE CELLS
+   Column clues: stacked vertically, bottom-aligned
+   Row clues: inline horizontally, right-aligned
+   ============================================== */
+.colClueCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 4px;
+  background-color: #f5f5f5;
+  /* Width matches cell size */
+  width: var(--cell);
+  min-width: var(--cell);
+  gap: 2px;
+}
+
+.rowClueCell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  /* Height matches cell size */
+  height: var(--cell);
+  min-height: var(--cell);
+  gap: 6px;
+}
+
+.clueNumber {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #505050;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==============================================
+   GRID CELLS
+   Cell size controlled by --cell variable
+   ============================================== */
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  /* Cell size from variable */
+  width: var(--cell);
+  height: var(--cell);
+  min-width: var(--cell);
+  min-height: var(--cell);
+  transition: background-color 0.1s;
+  /* Prevent text selection and touch scrolling during drag */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
+}
+
+.cell:hover {
+  background-color: #f0f5ff;
+}
+
+/* Accessible focus indicator */
+.cell:focus-visible {
+  outline: 2px solid #6a9fd4;
+  outline-offset: -2px;
+  z-index: 2;
+  background-color: #e8f0ff;
+}
+
+/* Remove default focus ring */
+.cell:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Filled cell (value = 1) - near-black */
+.cellFilled {
+  width: 28px;
+  height: 28px;
+  background-color: #2a2a2a;
+  border-radius: 3px;
+}
+
+/* X marker (value = 2) - subtle mark */
+.cellX {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #b0b0b0;
+  line-height: 1;
+}
+
+/* Read-only cell - disabled state */
+.cellReadOnly {
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+.cellReadOnly:hover {
+  background-color: #ffffff;
+}
+
+/* Native disabled state for cells */
+.cell:disabled {
+  cursor: not-allowed;
+  opacity: 0.95;
+}
+
+.cell:disabled:hover {
+  background-color: #ffffff;
+}
+
+/* ==============================================
+   MOBILE (<768px)
+   Show mode toggle for touch devices
+   ============================================== */
+@media (max-width: 767px) {
+  .modeToggleRow {
+    display: flex;
+  }
+}
+
+/* ==============================================
+   TABLET (<1024px)
+   ============================================== */
+@media (max-width: 1023px) {
+  .boardContainer {
+    --cell: 32px;
+  }
+
+  .colClueCell {
+    padding: 5px 3px;
+  }
+
+  .rowClueCell {
+    padding: 3px 6px;
+    gap: 5px;
+  }
+
+  .cellFilled {
+    width: 24px;
+    height: 24px;
+  }
+
+  .cellX {
+    font-size: 1.375rem;
+  }
+
+  .clueNumber {
+    font-size: 0.75rem;
+  }
+}
+
+/* ==============================================
+   SMALL MOBILE (<600px)
+   Shrink cells to fit screen
+   ============================================== */
+@media (max-width: 599px) {
+  .boardContainer {
+    --cell: 28px;
+  }
+
+  .modeButton {
+    padding: 7px 12px;
+    font-size: 0.8125rem;
+  }
+
+  .colClueCell {
+    padding: 4px 2px;
+  }
+
+  .rowClueCell {
+    padding: 2px 5px;
+    gap: 4px;
+  }
+
+  .cellFilled {
+    width: 20px;
+    height: 20px;
+  }
+
+  .cellX {
+    font-size: 1.125rem;
+  }
+
+  .clueNumber {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ==============================================
+   VERY SMALL SCREENS (<400px)
+   Further shrink for tiny devices
+   ============================================== */
+@media (max-width: 400px) {
+  .boardContainer {
+    --cell: 24px;
+  }
+
+  .colClueCell {
+    padding: 3px 2px;
+  }
+
+  .rowClueCell {
+    padding: 2px 4px;
+    gap: 3px;
+  }
+
+  .cellFilled {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cellX {
+    font-size: 0.875rem;
+  }
+
+  .clueNumber {
+    font-size: 0.625rem;
+  }
+}
