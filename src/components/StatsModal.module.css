@@ -18,7 +18,8 @@
   position: relative;
   width: 100%;
   max-width: 420px;
-  background-color: #ffffff;
+  background-color: var(--game-bg);
+  color: var(--text-color);
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
   padding: 24px;
@@ -36,7 +37,7 @@
   justify-content: center;
   font-size: 1.25rem;
   line-height: 1;
-  color: #909090;
+  color: var(--text-secondary);
   background-color: transparent;
   border: none;
   border-radius: 50%;
@@ -45,16 +46,16 @@
 }
 
 .closeX:hover {
-  background-color: #f0f0f0;
-  color: #606060;
+  background-color: var(--button-bg);
+  color: var(--text-color);
 }
 
 .closeX:active {
-  background-color: #e8e8e8;
+  background-color: var(--border-color);
 }
 
 .closeX:focus-visible {
-  outline: 2px solid #9abfda;
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
@@ -63,7 +64,7 @@
   margin: 0 0 20px 0;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #4a4a4a;
+  color: var(--text-color);
   text-align: center;
 }
 

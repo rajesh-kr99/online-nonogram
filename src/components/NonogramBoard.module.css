@@ -9,23 +9,24 @@
    CONTAINER
    ============================================== */
 .boardContainer {
-  /* Cell size variable - adjusted in media queries */
-  --cell: 36px;
+  /* Cell sizing inherited from parent .puzzleArea */
+  /* Parent sets --cell to appropriate value for the breakpoint */
 
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   width: 100%;
+  height: 100%;
   max-width: 100%;
+  max-height: 100%;
   user-select: none;
   -webkit-user-select: none;
   /* Prevent page scroll while painting on touch devices */
-  touch-action: pan-x;
-  /* Allow horizontal scroll if board exceeds container, stay centered when it fits */
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+  /* Don't scroll at this level */
+  overflow: visible;
 }
 
 /* ==============================================
@@ -43,8 +44,8 @@
   padding: 7px 14px;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #606060;
-  background-color: #f0f0f0;
+  color: var(--text-secondary);
+  background-color: var(--button-bg);
   border: 1px solid transparent;
   border-radius: 20px;
   cursor: pointer;
@@ -52,34 +53,52 @@
 }
 
 .modeButton:hover {
-  background-color: #e8e8e8;
-  color: #4a4a4a;
+  background-color: var(--border-color);
+  color: var(--text-color);
 }
 
 .modeButton:active {
-  background-color: #e0e0e0;
-  color: #404040;
+  background-color: var(--accent-color);
+  color: #ffffff;
 }
 
 .modeButton:focus-visible {
-  outline: 2px solid #9abfda;
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
 /* Active mode - subtle dark fill */
 .modeActive {
-  background-color: #4a4a4a;
+  background-color: var(--accent-color);
   border-color: transparent;
   color: #ffffff;
 }
 
 .modeActive:hover {
-  background-color: #3a3a3a;
+  background-color: var(--accent-hover);
   color: #ffffff;
 }
 
 .modeActive:active {
-  background-color: #303030;
+  background-color: var(--accent-hover);
+}
+
+/* ==============================================
+   BOARD SCROLL WRAPPER
+   Handles horizontal/vertical scrolling
+   ============================================== */
+.boardScroll {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  flex: 0 0 auto;
+}
+
+.boardScrollInner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100%;
 }
 
 /* ==============================================
@@ -89,24 +108,24 @@
 .board {
   display: grid;
   gap: 1px;
-  background-color: #c8c8c8;
-  border: 2px solid #a0a0a0;
+  background-color: var(--border-color);
+  border: 2px solid var(--text-secondary);
   border-radius: 6px;
   padding: 1px;
   user-select: none;
   -webkit-user-select: none;
   /* Prevent touch scrolling during paint gestures */
   touch-action: none;
-  /* Size to content, respect container bounds */
+  /* Size to content, container handles scrolling */
   width: max-content;
-  max-width: 100%;
+  height: max-content;
 }
 
 /* ==============================================
    CORNER SPACE (top-left empty area)
    ============================================== */
 .cornerSpace {
-  background-color: #f5f5f5;
+  background-color: var(--button-bg);
 }
 
 /* ==============================================
@@ -119,8 +138,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding: 6px 4px;
-  background-color: #f5f5f5;
+  padding: calc(var(--cell) * 0.12) calc(var(--cell) * 0.08);
+  background-color: var(--button-bg);
   /* Width matches cell size */
   width: var(--cell);
   min-width: var(--cell);
@@ -132,8 +151,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  padding: 4px 8px;
-  background-color: #f5f5f5;
+  padding: calc(var(--cell) * 0.08) calc(var(--cell) * 0.15);
+  background-color: var(--button-bg);
   /* Height matches cell size */
   height: var(--cell);
   min-height: var(--cell);
@@ -141,9 +160,9 @@
 }
 
 .clueNumber {
-  font-size: 0.8125rem;
+  font-size: max(0.55rem, calc(var(--cell) * 0.25));
   font-weight: 600;
-  color: #505050;
+  color: var(--text-color);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -157,7 +176,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: var(--game-bg);
   border: none;
   cursor: pointer;
   padding: 0;
@@ -174,16 +193,13 @@
   touch-action: none;
 }
 
-.cell:hover {
-  background-color: #f0f5ff;
-}
-
 /* Accessible focus indicator */
 .cell:focus-visible {
-  outline: 2px solid #6a9fd4;
+  outline: 2px solid var(--accent-color);
   outline-offset: -2px;
   z-index: 2;
-  background-color: #e8f0ff;
+  background-color: var(--accent-color);
+  opacity: 0.3;
 }
 
 /* Remove default focus ring */
@@ -193,9 +209,9 @@
 
 /* Filled cell (value = 1) - near-black */
 .cellFilled {
-  width: 28px;
-  height: 28px;
-  background-color: #2a2a2a;
+  width: calc(var(--cell) - 6px);
+  height: calc(var(--cell) - 6px);
+  background-color: var(--cell-filled);
   border-radius: 3px;
 }
 
@@ -203,7 +219,7 @@
 .cellX {
   font-size: 1.5rem;
   font-weight: 300;
-  color: #b0b0b0;
+  color: var(--cell-marked);
   line-height: 1;
 }
 
@@ -214,7 +230,7 @@
 }
 
 .cellReadOnly:hover {
-  background-color: #ffffff;
+  background-color: var(--game-bg);
 }
 
 /* Native disabled state for cells */
@@ -224,7 +240,7 @@
 }
 
 .cell:disabled:hover {
-  background-color: #ffffff;
+  background-color: var(--game-bg);
 }
 
 /* ==============================================
@@ -241,31 +257,7 @@
    TABLET (<1024px)
    ============================================== */
 @media (max-width: 1023px) {
-  .boardContainer {
-    --cell: 32px;
-  }
-
-  .colClueCell {
-    padding: 5px 3px;
-  }
-
-  .rowClueCell {
-    padding: 3px 6px;
-    gap: 5px;
-  }
-
-  .cellFilled {
-    width: 24px;
-    height: 24px;
-  }
-
-  .cellX {
-    font-size: 1.375rem;
-  }
-
-  .clueNumber {
-    font-size: 0.75rem;
-  }
+  /* Cell sizing handled by puzzleArea --cell variable */
 }
 
 /* ==============================================
@@ -273,36 +265,7 @@
    Shrink cells to fit screen
    ============================================== */
 @media (max-width: 599px) {
-  .boardContainer {
-    --cell: 28px;
-  }
-
-  .modeButton {
-    padding: 7px 12px;
-    font-size: 0.8125rem;
-  }
-
-  .colClueCell {
-    padding: 4px 2px;
-  }
-
-  .rowClueCell {
-    padding: 2px 5px;
-    gap: 4px;
-  }
-
-  .cellFilled {
-    width: 20px;
-    height: 20px;
-  }
-
-  .cellX {
-    font-size: 1.125rem;
-  }
-
-  .clueNumber {
-    font-size: 0.6875rem;
-  }
+  /* Cell sizing handled by puzzleArea --cell variable */
 }
 
 /* ==============================================
@@ -310,29 +273,5 @@
    Further shrink for tiny devices
    ============================================== */
 @media (max-width: 400px) {
-  .boardContainer {
-    --cell: 24px;
-  }
-
-  .colClueCell {
-    padding: 3px 2px;
-  }
-
-  .rowClueCell {
-    padding: 2px 4px;
-    gap: 3px;
-  }
-
-  .cellFilled {
-    width: 16px;
-    height: 16px;
-  }
-
-  .cellX {
-    font-size: 0.875rem;
-  }
-
-  .clueNumber {
-    font-size: 0.625rem;
-  }
+  /* Cell sizing handled by puzzleArea --cell variable */
 }

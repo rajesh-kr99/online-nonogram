@@ -6,15 +6,45 @@
   padding: 0;
 }
 
+:root {
+  /* Light mode (default) */
+  --text-color: #333;
+  --text-secondary: #666;
+  --game-bg: #F9FAFB;
+  --accent-color: #007bff;
+  --accent-hover: #0056b3;
+  --border-color: #ddd;
+  --button-bg: #f0f0f0;
+  --button-text: #333;
+  /* Cell colors - day mode */
+  --cell-filled: #1F2937;
+  --cell-marked: #A1A1AA;
+}
+
+html.dark-mode {
+  /* Modern Dark theme */
+  --text-color: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --game-bg: #111827;
+  --accent-color: #4a9eff;
+  --accent-hover: #357abd;
+  --border-color: #333;
+  --button-bg: #2a2a2a;
+  --button-text: #e0e0e0;
+  /* Cell colors - calm mode */
+  --cell-filled: #D1D5DB;
+  --cell-marked: #52525B;
+}
+
 html,
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fafafa;
-  color: #333;
-}
+  background-color: var(--game-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;}
 
 button {
   font-family: inherit;

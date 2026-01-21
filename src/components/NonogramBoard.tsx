@@ -12,6 +12,8 @@ export interface NonogramBoardProps {
   value: Grid<CellValue>;
   /** Called when the grid changes */
   onChange: (nextGrid: Grid<CellValue>, actionLabel?: string) => void;
+  /** Called when a row is completed */
+  onRowComplete?: (rowIndex: number) => void;
   /** Clues for each row */
   rowClues: number[][];
   /** Clues for each column */
@@ -38,12 +40,52 @@ export default function NonogramBoard({
   size,
   value,
   onChange,
+  onRowComplete,
   rowClues,
   colClues,
   readOnly = false,
 }: NonogramBoardProps) {
   // Mobile mode toggle (Fill or X)
   const [mobileMode, setMobileMode] = useState<MobileMode>("fill");
+
+  // Track window width for responsive cell sizing
+  const [windowWidth, setWindowWidth] = useState<number>(
+    typeof window !== "undefined" ? window.innerWidth : 1024
+  );
+
+  // Update window width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Calculate responsive cell size based on puzzle size and viewport width
+  const calculateCellSize = (puzzleSize: number): string => {
+    // Min and max cell sizes
+    const minCell = 20;
+    const maxCell = 120;
+
+    // Base responsive calculation using viewport width
+    // Smaller puzzles get bigger cells, larger puzzles get smaller cells
+    let cellSize: number;
+
+    if (puzzleSize === 5) {
+      // 5x5: Use more of the viewport, scale with width
+      cellSize = Math.max(minCell, Math.min(maxCell, windowWidth / 15));
+    } else if (puzzleSize === 10) {
+      // 10x10: Medium scaling
+      cellSize = Math.max(minCell, Math.min(maxCell, windowWidth / 22));
+    } else {
+      // 15x15: Smallest cells to fit on screen, but still scale
+      cellSize = Math.max(minCell, Math.min(maxCell, windowWidth / 45));
+    }
+
+    return `${Math.round(cellSize)}px`;
+  };
 
   // Drag painting state
   const [paintMode, setPaintMode] = useState<PaintMode>(null);
@@ -57,6 +99,29 @@ export default function NonogramBoard({
     isPaintingRef.current = next;
   }, []);
 
+  // Check if a row is complete (all cells filled with correct value)
+  const isRowComplete = useCallback(
+    (grid: Grid<CellValue>, rowIndex: number): boolean => {
+      return grid[rowIndex].every((cell) => cell === 1);
+    },
+    []
+  );
+
+  // Detect newly completed rows and trigger callbacks
+  const checkRowCompletions = useCallback(
+    (prevGrid: Grid<CellValue>, nextGrid: Grid<CellValue>) => {
+      if (!onRowComplete) return;
+      for (let i = 0; i < size; i++) {
+        const wasComplete = isRowComplete(prevGrid, i);
+        const isNowComplete = isRowComplete(nextGrid, i);
+        if (!wasComplete && isNowComplete) {
+          onRowComplete(i);
+        }
+      }
+    },
+    [size, onRowComplete, isRowComplete]
+  );
+
   // Batched painting: draft grid and change tracking
   const draftGridRef = useRef<Grid<CellValue> | null>(null);
   const didChangeRef = useRef(false);
@@ -67,13 +132,14 @@ export default function NonogramBoard({
   // Commit the draft grid to onChange
   const commitDraft = useCallback(() => {
     if (didChangeRef.current && draftGridRef.current) {
+      checkRowCompletions(value, draftGridRef.current);
       onChange(draftGridRef.current, "Paint cells");
     }
     // Clean up
     draftGridRef.current = null;
     didChangeRef.current = false;
     setPreviewGrid(null);
-  }, [onChange]);
+  }, [onChange, checkRowCompletions, value]);
 
   // Stop painting helper (commit + reset all state)
   const stopPainting = useCallback(() => {
@@ -296,9 +362,21 @@ export default function NonogramBoard({
     );
   }
 
+  // Calculate total "cell units" the board needs (grid cells + clue bands)
+  const cellCountX = size + maxRowClueLength;
+  const cellCountY = size + maxColClueLength;
+
   return (
     <div
       className={styles.boardContainer}
+      style={{
+        "--cells-x": cellCountX,
+        "--cells-y": cellCountY,
+        "--n": size,
+        "--rc": maxRowClueLength,
+        "--cc": maxColClueLength,
+        "--cell": calculateCellSize(size),
+      } as React.CSSProperties}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
       onTouchMove={handleTouchMove}
@@ -326,23 +404,26 @@ export default function NonogramBoard({
         </button>
       </div>
 
-      {/* Board Grid with Clues */}
-      <div
-        className={styles.board}
-        onContextMenu={handleContextMenu}
-        style={{
-          gridTemplateColumns: `repeat(${maxRowClueLength}, auto) repeat(${size}, 1fr)`,
-          gridTemplateRows: `repeat(${maxColClueLength}, auto) repeat(${size}, 1fr)`,
-        }}
-      >
-        {/* Empty corner (top-left) */}
-        <div
-          className={styles.cornerSpace}
-          style={{
-            gridColumn: `1 / ${maxRowClueLength + 1}`,
-            gridRow: `1 / ${maxColClueLength + 1}`,
-          }}
-        />
+      {/* Board Scroll Wrapper */}
+      <div className={styles.boardScroll}>
+        <div className={styles.boardScrollInner}>
+          {/* Board Grid with Clues */}
+          <div
+            className={styles.board}
+            onContextMenu={handleContextMenu}
+            style={{
+              gridTemplateColumns: `repeat(var(--rc), var(--clue)) repeat(var(--n), var(--cell))`,
+              gridTemplateRows: `repeat(var(--cc), var(--clue)) repeat(var(--n), var(--cell))`,
+            }}
+          >
+            {/* Empty corner (top-left) */}
+            <div
+              className={styles.cornerSpace}
+              style={{
+                gridColumn: `1 / ${maxRowClueLength + 1}`,
+                gridRow: `1 / ${maxColClueLength + 1}`,
+              }}
+            />
 
         {/* Column Clues (above grid) */}
         {colClues.map((clues, colIndex) => (
@@ -410,6 +491,8 @@ export default function NonogramBoard({
             </button>
           ))
         )}
+          </div>
+        </div>
       </div>
     </div>
   );

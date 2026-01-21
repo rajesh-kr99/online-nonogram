@@ -9,218 +9,310 @@
    CONTAINER
    ============================================== */
 .container {
-  min-height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background-color: var(--game-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow: hidden;
+  /* Prevent scrolling on mobile when address bar appears */
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  gap: 0;
 }
 
 /* ==============================================
-   HEADER
+   HEADER - COMPACT MOBILE DESIGN
    ============================================== */
 .header {
-  padding: 14px 24px;
-  background-color: #fbfbfb;
-  border-bottom: 1px solid #ebebeb;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-}
-
-.headerInner {
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
+  flex: 0 0 auto;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 6px;
+  background-color: var(--game-bg);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: none;
+  max-height: 80px;
+  width: 100%;
 }
 
-.siteTitle {
-  font-size: 1.375rem;
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 4px;
+  height: 24px;
+}
+
+.siteTitleMobile {
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #4a4a4a;
+  color: var(--text-color);
   margin: 0;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  min-width: 60px;
 }
 
-.nav {
+.headerNav {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 2px;
+  width: 100%;
+  justify-content: center;
+  height: 20px;
 }
 
-/* Pill-shaped nav buttons - minimal and calm */
-.navButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  padding: 7px 14px;
-  font-size: 0.8125rem;
+.difficultyButton {
+  flex: 1;
+  min-width: 0;
+  max-width: 80px;
+  padding: 4px 6px;
+  font-size: 0.65rem;
   font-weight: 500;
-  color: #606060;
-  background-color: #f0f0f0;
+  color: var(--text-secondary);
+  background-color: var(--button-bg);
   border: 1px solid transparent;
-  border-radius: 20px;
+  border-radius: 16px;
   cursor: pointer;
   transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.navButton:hover {
-  background-color: #e8e8e8;
-  color: #4a4a4a;
+.difficultyButton:hover:not(:disabled) {
+  background-color: var(--border-color);
+  color: var(--text-color);
 }
 
-.navButton:active {
-  background-color: #e0e0e0;
-  color: #404040;
-}
-
-.navButton:focus-visible {
-  outline: 2px solid #9abfda;
-  outline-offset: 2px;
-}
-
-/* Active difficulty button */
-.navButtonActive {
-  background-color: #4a4a4a;
+.difficultyButtonActive {
+  background-color: #333;
   border-color: transparent;
   color: #ffffff;
+  font-weight: 600;
 }
 
-.navButtonActive:hover {
-  background-color: #3a3a3a;
-  color: #ffffff;
+.difficultyButtonActive:hover {
+  background-color: #555;
 }
 
-.navButtonActive:active {
-  background-color: #303030;
-}
-
-/* Disabled nav button */
-.navButton:disabled {
+.difficultyButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.navButton:disabled:hover {
-  background-color: #f0f0f0;
-  color: #606060;
-}
-
-/* Streak badge inside Daily button */
-.streakBadge {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  margin-left: 0;
-  padding: 2px 6px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  background-color: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  white-space: nowrap;
-  line-height: 1.2;
-}
-
-/* Tooltip for streak badge */
-.streakBadge::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  pointer-events: none;
-
-  background-color: #333;
-  color: #fff;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-
-  opacity: 0;
-  visibility: hidden;
-  z-index: 10;
-}
-
-/* Show tooltip on hover or focus */
-.streakBadge:hover::after,
-.streakBadge:focus-visible::after {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Streak badge when Daily button is active (dark background) */
-.navButtonActive .streakBadge {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-/* Daily solved checkmark */
-.dailySolvedMark {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #6a9a6a;
-  opacity: 0.8;
-  line-height: 1;
-}
-
-.navButtonActive .dailySolvedMark {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Calm Mode toggle - subtle distinction */
-.calmModeToggle {
-  padding: 7px 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #808080;
-  background-color: transparent;
-  border: 1px solid #d8d8d8;
-  border-radius: 20px;
+.settingsButton {
+  background: none;
+  border: none;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  padding: 2px 4px;
+  color: var(--text-color);
+  transition: transform 0.2s, opacity 0.2s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
 }
 
-.calmModeToggle:hover {
-  background-color: #f8f8f8;
-  border-color: #c8c8c8;
-  color: #686868;
+.settingsButton:hover {
+  opacity: 0.7;
 }
 
-.calmModeToggle:active {
-  background-color: #f0f0f0;
-  border-color: #c0c0c0;
+.settingsButton:active {
+  transform: scale(0.95);
 }
 
-.calmModeToggle:focus-visible {
-  outline: 2px solid #9abfda;
-  outline-offset: 2px;
+.headerTimer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background-color: var(--button-bg);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  white-space: nowrap;
+  min-width: 45px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
-/* Calm Mode ON - muted sage green, not bright */
-.calmModeActive {
-  background-color: #f0f5f0;
-  border-color: #c5d8c5;
-  color: #6a8a6a;
+/* ==============================================
+   SETTINGS MODAL
+   ============================================== */
+.settingsModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.2s ease-out;
 }
 
-.calmModeActive:hover {
-  background-color: #e8f0e8;
-  border-color: #b8d0b8;
-  color: #5a7a5a;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.calmModeActive:active {
-  background-color: #e0ebe0;
+.settingsModalContent {
+  background-color: var(--game-bg);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.settingsModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settingsModalHeader h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.closeButton:hover {
+  opacity: 0.7;
+}
+
+.closeButton:active {
+  transform: scale(0.95);
+}
+
+.settingsModalBody {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settingsItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settingsItem label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.toggle {
+  padding: 4px 8px;
+  background-color: var(--button-bg);
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 500;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.toggle:hover {
+  background-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.toggleActive {
+  background-color: #333;
+  color: #ffffff;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.toggleActive:hover {
+  background-color: #555;
+}
+
+.settingsButton2 {
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.15s;
+  margin-top: 8px;
+}
+
+.settingsButton2:hover {
+  background-color: #555;
+}
+
+.settingsButton2:active {
+  background-color: #222;
 }
 
 /* ==============================================
@@ -229,58 +321,91 @@
    ============================================== */
 .main {
   flex: 1;
-  display: grid;
-  /* minmax(0, 1fr) allows left column to shrink below content size, preventing overflow */
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 24px;
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
   width: 100%;
-  align-items: start;
-  align-content: start;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ==============================================
+   LEFT SIDEBAR - HIDDEN
+   ============================================== */
+.leftSidebar {
+  display: none;
+}
+
+.sidebarTimer {
+  display: none;
+}
+
+/* ==============================================
+   BOTTOM BAR
+   Info and controls in one horizontal line
+   ============================================== */
+.bottomBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 4px 6px;
+  padding-bottom: max(4px, env(safe-area-inset-bottom));
+  background-color: var(--game-bg);
+  font-size: 0.75rem;
 }
 
 /* ==============================================
    PUZZLE COLUMN
    ============================================== */
 .puzzleColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: center;
-  justify-self: center;
+  /* 3-row grid: puzzle (grows 1fr), bottomBar (auto), status message (auto) */
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+
+  flex: 1;
   width: 100%;
-  /* Allow larger boards to expand */
-  max-width: 100%;
-  /* Allow column to shrink below content size in grid */
-  min-width: 0;
+  min-height: 0;
+  padding: 4px;
+
+  overflow: hidden;
 }
 
 /* ==============================================
    PUZZLE AREA
    Calm card container that wraps the nonogram board
+   Desktop: Expand to fill space with large cells
    ============================================== */
+/* DESKTOP ONLY (>= 1024px) */
 .puzzleArea {
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px;
-  background-color: #fefefe;
-  border: 1px solid #e5e5e5;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0, 0, 0, 0.02);
-  /* Naturally hugs content, constrained by parent */
+  width: 100%;
   max-width: 100%;
-  /* Allow horizontal scroll inside if board is very large */
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  aspect-ratio: auto;
+  touch-action: manipulation;
+  overflow: visible;
+
+  /* DESKTOP CELL SIZING */
+  --clue: 22px;
+  --cell: 40px;
 }
 
 .placeholderText {
   font-size: 1.125rem;
-  color: #c0c0c0;
+  color: var(--text-secondary);
   font-weight: 500;
   user-select: none;
 }
@@ -301,26 +426,26 @@
   padding: 9px 16px;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #606060;
-  background-color: #f8f8f8;
-  border: 1px solid transparent;
+  color: var(--text-secondary);
+  background-color: var(--button-bg);
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.15s, color 0.15s;
 }
 
 .controlButton:hover {
-  background-color: #f0f0f0;
-  color: #4a4a4a;
+  background-color: var(--border-color);
+  color: var(--text-color);
 }
 
 .controlButton:active {
-  background-color: #e8e8e8;
-  color: #404040;
+  background-color: #333;
+  color: #ffffff;
 }
 
 .controlButton:focus-visible {
-  outline: 2px solid #9abfda;
+  outline: 2px solid #333;
   outline-offset: 2px;
 }
 
@@ -331,8 +456,41 @@
 }
 
 .controlButton:disabled:hover {
-  background-color: #f8f8f8;
-  color: #606060;
+  background-color: var(--button-bg);
+  color: var(--text-secondary);
+}
+
+/* ==============================================
+   PUZZLE INFO CONTAINER
+   Sidebar layout - vertical stacking
+   ============================================== */
+.puzzleInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.solvedBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #059669;
+  background-color: rgba(5, 150, 105, 0.1);
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(5, 150, 105, 0.3);
+  white-space: nowrap;
+}
+
+/* Dark mode: Solved badge */
+:global(.dark-mode) .solvedBadge {
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
 }
 
 /* ==============================================
@@ -340,7 +498,7 @@
    ============================================== */
 .dailyMeta {
   font-size: 0.8rem;
-  color: #8a8a8a;
+  color: var(--text-secondary);
   margin: 2px 0 0 0;
   text-align: center;
 }
@@ -364,8 +522,8 @@
   padding: 5px 12px;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #707070;
-  background-color: #f0f0f0;
+  color: var(--text-secondary);
+  background-color: var(--button-bg);
   border: 1px solid transparent;
   border-radius: 16px;
   cursor: pointer;
@@ -373,26 +531,26 @@
 }
 
 .viewButton:hover {
-  background-color: #e8e8e8;
-  color: #505050;
+  background-color: var(--border-color);
+  color: var(--text-color);
 }
 
 .viewButton:active {
-  background-color: #e0e0e0;
+  background-color: var(--accent-color);
 }
 
 .viewButton:focus-visible {
-  outline: 2px solid #9abfda;
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
 .viewButtonActive {
-  background-color: #5a5a5a;
+  background-color: var(--accent-color);
   color: #ffffff;
 }
 
 .viewButtonActive:hover {
-  background-color: #4a4a4a;
+  background-color: var(--accent-hover);
   color: #ffffff;
 }
 
@@ -485,23 +643,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Fixed width ALWAYS reserved to prevent CLS when Calm Mode toggles */
-  width: 300px;
-  min-width: 300px;
+  justify-content: flex-start;
+  width: 250px;
+  min-width: 250px;
   flex-shrink: 0;
-  /* Hug the right edge on desktop grid */
-  justify-self: end;
+  padding: 4px;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* Desktop: show 300x600 ad rail wrapper (always present for spacing) */
+/* Desktop: show ad wrapper (always present for spacing) */
 .adDesktopWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Reserve exact ad dimensions even when AdSlot renders nothing */
-  width: 300px;
-  height: 600px;
-  min-height: 600px;
+  /* Flexible sizing for new layout */
+  width: 100%;
+  height: auto;
+  min-height: auto;
 }
 
 /* Desktop: hide mobile banner */
@@ -515,32 +677,52 @@
    ============================================== */
 @media (max-width: 1023px) {
   .header {
-    padding: 12px 20px;
+    padding: 4px 6px;
   }
 
-  .siteTitle {
-    font-size: 1.25rem;
-  }
-
-  /* Switch to single column vertical flex */
+  /* Switch to single column vertical flex - TIGHT */
   .main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding: 20px;
+    gap: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
   }
 
-  /* Puzzle column stays first (default order) */
+  /* Puzzle column stays first (default order) - MUST GROW */
   .puzzleColumn {
     max-width: none;
     width: 100%;
     order: 0;
+    padding: 4px;
+    gap: 4px;
+    flex: 1;
+    height: 100%;
+    min-height: 0;
   }
 
-  /* Responsive puzzle area for tablets/mobile */
+  /* Responsive puzzle area for tablets/mobile - NO PADDING */
   .puzzleArea {
-    padding: 12px;
+    padding: 0;
+    max-width: 100%;
+    width: 100%;
+    flex: 0 0 auto;
+    min-height: 0;
+    overflow: visible;
+
+    /* MOBILE (<= 1023px): Separate clue width from cell width */
+    /* Clue slots are fixed 18px, cells expand to fill remaining space */
+    /* This allows 10x10/15x15 to be larger on mobile without scrolling */
+    --clue: 18px;
+    --cell: min(
+      80px,
+      max(
+        32px,
+        calc((100% - 10px - (var(--rc, 2) * var(--clue, 18px))) / var(--n, 15))
+      )
+    );
   }
 
   /* Ad container appears after puzzleColumn, centered */
@@ -548,10 +730,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 320px;
-    min-width: 320px;
+    width: 100%;
+    min-width: auto;
     order: 1;
-    margin: 0 auto;
+    margin: 0;
+    padding: 4px;
+    flex-shrink: 0;
+    background-color: transparent;
+    border: none;
+    height: auto;
   }
 
   /* Hide desktop ad rail completely */
@@ -577,51 +764,23 @@
    ============================================== */
 @media (max-width: 599px) {
   .header {
-    padding: 12px 16px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    padding: 4px 6px;
   }
 
-  .siteTitle {
-    font-size: 1.125rem;
-  }
-
-  .nav {
-    width: 100%;
-  }
-
-  .navButton {
-    padding: 7px 12px;
-    font-size: 0.8125rem;
-  }
-
-  .calmModeToggle {
-    padding: 7px 10px;
-    font-size: 0.75rem;
-  }
-
-  .main {
-    padding: 16px;
-    gap: 16px;
-  }
-
-  /* Smaller puzzle on very small screens */
+  /* Smaller puzzle on very small screens - NO PADDING */
   .puzzleArea {
-    padding: 10px;
-  }
+    padding: 0;
 
-  .placeholderText {
-    font-size: 1rem;
-  }
-
-  .controlsRow {
-    gap: 8px;
-  }
-
-  .controlButton {
-    padding: 8px 14px;
-    font-size: 0.8125rem;
+    /* VERY SMALL MOBILE (<= 599px): Same formula as tablet, but smaller max */
+    /* Use same sizing as mobile but with slightly smaller max cell */
+    --clue: 16px;
+    --cell: min(
+      48px,
+      max(
+        22px,
+        calc((100% - 10px - (var(--rc, 2) * var(--clue, 16px))) / var(--n, 15))
+      )
+    );
   }
 }
 

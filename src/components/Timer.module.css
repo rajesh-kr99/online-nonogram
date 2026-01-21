@@ -1,0 +1,21 @@
+.timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0;
+  color: var(--text-color, #111827);
+}
+
+.timerLabel {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.timerDisplay {
+  font-family: "Courier New", monospace;
+  letter-spacing: 0.1em;
+  min-width: 3rem;
+}

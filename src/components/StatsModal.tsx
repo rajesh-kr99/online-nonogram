@@ -118,19 +118,6 @@ export default function StatsModal({ open, stats, onClose }: StatsModalProps) {
             <span className={styles.label}>Hard solved</span>
             <span className={styles.value}>{stats.totalSolvedByDifficulty.hard}</span>
           </div>
-
-          <div className={styles.row}>
-            <span className={styles.label}>Seen today (Easy)</span>
-            <span className={styles.value}>{stats.seenTodayByDifficulty?.easy ?? 0}</span>
-          </div>
-          <div className={styles.row}>
-            <span className={styles.label}>Seen today (Medium)</span>
-            <span className={styles.value}>{stats.seenTodayByDifficulty?.medium ?? 0}</span>
-          </div>
-          <div className={styles.row}>
-            <span className={styles.label}>Seen today (Hard)</span>
-            <span className={styles.value}>{stats.seenTodayByDifficulty?.hard ?? 0}</span>
-          </div>
         </div>
 
         <button className={styles.closeButton} onClick={onClose}>

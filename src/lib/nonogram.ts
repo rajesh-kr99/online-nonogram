@@ -3,6 +3,8 @@
  * Pure TypeScript functions for nonogram puzzle logic.
  */
 
+import puzzlesData from './puzzles.json';
+
 // ==============================================
 // TYPES
 // ==============================================
@@ -167,6 +169,7 @@ export type Difficulty = "easy" | "medium" | "hard";
 export interface PuzzleEntry {
   size: number;
   id: string;
+  name: string | null;
   solution: Grid<SolutionCell>;
 }
 
@@ -186,226 +189,8 @@ export const SAMPLE_5X5_SOLUTION: Grid<SolutionCell> = [
   [1, 0, 0, 0, 1],
 ];
 
-/**
- * Medium 10x10 solution grid.
- * Pattern: Smiley face
- */
-export const MEDIUM_10X10_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-  [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-  [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-  [1, 0, 0, 0, 1, 1, 0, 0, 0, 1],
-  [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-];
-
-/**
- * Medium puzzle (formerly "daily"): Heart shape
- */
-export const DAILY_HEART_SOLUTION: Grid<SolutionCell> = [
-  [0, 1, 1, 0, 0, 0, 0, 1, 1, 0],
-  [1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-
-/**
- * Medium puzzle (formerly "daily"): Arrow pointing up
- */
-export const DAILY_ARROW_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 1, 1, 0, 1, 1, 0, 1, 1, 0],
-  [1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-];
-
-/**
- * Medium puzzle (formerly "daily"): Diamond shape
- */
-export const DAILY_DIAMOND_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-];
-
-/**
- * Additional 5x5 puzzle: Plus sign
- */
-const EASY_PLUS_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 1, 0, 0],
-  [0, 0, 1, 0, 0],
-  [1, 1, 1, 1, 1],
-  [0, 0, 1, 0, 0],
-  [0, 0, 1, 0, 0],
-];
-
-/**
- * Additional 5x5 puzzle: Square frame
- */
-const EASY_FRAME_SOLUTION: Grid<SolutionCell> = [
-  [1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 1],
-  [1, 0, 0, 0, 1],
-  [1, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1],
-];
-
-/**
- * Easy 5x5 puzzle: Diamond
- */
-const EASY_DIAMOND_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 1, 0, 0],
-  [0, 1, 0, 1, 0],
-  [1, 0, 0, 0, 1],
-  [0, 1, 0, 1, 0],
-  [0, 0, 1, 0, 0],
-];
-
-/**
- * Easy 5x5 puzzle: Box
- */
-const EASY_BOX_SOLUTION: Grid<SolutionCell> = [
-  [1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 1],
-  [1, 0, 0, 0, 1],
-  [1, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1],
-];
-
-/**
- * Easy 5x5 puzzle: Arrow Right
- */
-const EASY_ARROW_SOLUTION: Grid<SolutionCell> = [
-  [0, 1, 0, 0, 0],
-  [0, 0, 1, 0, 0],
-  [1, 1, 1, 1, 1],
-  [0, 0, 1, 0, 0],
-  [0, 1, 0, 0, 0],
-];
-
-/**
- * Easy 5x5 puzzle: Heart (outline)
- */
-const EASY_HEART_SOLUTION: Grid<SolutionCell> = [
-  [0, 1, 0, 1, 0],
-  [1, 0, 1, 0, 1],
-  [1, 0, 0, 0, 1],
-  [0, 1, 0, 1, 0],
-  [0, 0, 1, 0, 0],
-];
-
-/**
- * Medium 10x10 puzzle: Letter "A"
- */
-const MEDIUM_A_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-
-/**
- * Medium 10x10 puzzle: Checker Cross
- */
-const MEDIUM_CROSS_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-
-/**
- * Medium 10x10 puzzle: House
- */
-const MEDIUM_HOUSE_SOLUTION: Grid<SolutionCell> = [
-  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-  [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-  [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
-
-/**
- * Medium 10x10 puzzle: Spiral
- */
-const MEDIUM_SPIRAL_SOLUTION: Grid<SolutionCell> = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-  [1, 0, 1, 0, 1, 1, 0, 1, 0, 1],
-  [1, 0, 1, 0, 1, 1, 0, 1, 0, 1],
-  [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
-
-/** Registry of all available puzzles by difficulty (pools for rotation) */
-export const PUZZLES: Record<Difficulty, PuzzleEntry[]> = {
-  easy: [
-    { size: 5, id: "easy-001", solution: SAMPLE_5X5_SOLUTION },
-    { size: 5, id: "easy-002", solution: EASY_PLUS_SOLUTION },
-    { size: 5, id: "easy-003", solution: EASY_FRAME_SOLUTION },
-    { size: 5, id: "easy-004", solution: EASY_DIAMOND_SOLUTION },
-    { size: 5, id: "easy-005", solution: EASY_BOX_SOLUTION },
-    { size: 5, id: "easy-006", solution: EASY_ARROW_SOLUTION },
-    { size: 5, id: "easy-007", solution: EASY_HEART_SOLUTION },
-  ],
-  medium: [
-    { size: 10, id: "medium-001", solution: MEDIUM_10X10_SOLUTION },
-    { size: 10, id: "medium-002", solution: MEDIUM_A_SOLUTION },
-    { size: 10, id: "medium-003", solution: MEDIUM_CROSS_SOLUTION },
-    { size: 10, id: "medium-004", solution: MEDIUM_HOUSE_SOLUTION },
-    { size: 10, id: "medium-005", solution: MEDIUM_SPIRAL_SOLUTION },
-
-    // formerly daily puzzles - now just more medium puzzles
-    { size: 10, id: "medium-006", solution: DAILY_HEART_SOLUTION },
-    { size: 10, id: "medium-007", solution: DAILY_ARROW_SOLUTION },
-    { size: 10, id: "medium-008", solution: DAILY_DIAMOND_SOLUTION },
-  ],
-  hard: [],
-};
+/** Registry of all available puzzles by difficulty (loaded from puzzles.json) */
+export const PUZZLES: Record<Difficulty, PuzzleEntry[]> = puzzlesData as Record<Difficulty, PuzzleEntry[]>;
 
 // ==============================================
 // DAILY FEATURED PUZZLE HELPERS
@@ -525,4 +310,38 @@ export function getNextPuzzleNoRepeat(
  */
 export function makeDailySeenKey(difficulty: Difficulty, dateISO: string): string {
   return `nonogram:seen:${difficulty}:${dateISO}:v1`;
+}
+
+/**
+ * Get the daily puzzle (same for all users) for a given difficulty and date.
+ * Uses day index from a fixed start date to cycle through puzzles deterministically.
+ * This is the ONLY puzzle shown for that difficulty on that day.
+ * 
+ * All users globally see the same puzzle on the same day.
+ * The puzzle cycles through the pool automatically using modulo.
+ * 
+ * @param difficulty - The difficulty level (easy, medium, hard)
+ * @param dateISO - The date in ISO format (YYYY-MM-DD)
+ * @returns The puzzle for that day
+ * @throws Error if no puzzles exist for the difficulty
+ */
+export function getDailyPuzzle(difficulty: Difficulty, dateISO: string): PuzzleEntry {
+  const pool = PUZZLES[difficulty];
+
+  if (pool.length === 0) {
+    throw new Error(`No puzzles available for difficulty: ${difficulty}`);
+  }
+
+  if (pool.length === 1) return pool[0];
+
+  // Calculate day index from fixed start date
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const startDate = new Date('2024-01-01');
+  const currentDate = new Date(`${dateISO}T00:00:00Z`);
+  const dayIndex = Math.floor((currentDate.getTime() - startDate.getTime()) / msPerDay);
+
+  // Use modulo to cycle through puzzles for this difficulty
+  const puzzleIndex = dayIndex % pool.length;
+
+  return pool[puzzleIndex];
 }
